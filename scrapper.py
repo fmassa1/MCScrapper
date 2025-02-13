@@ -31,10 +31,12 @@ def update_user():
 
 if __name__ == '__main__':
     
-
     while True:
         status, html = retrieve_html('https://youtube.com/user/penguinz0/videos')
-        titles = extract_video_titles(html)
-        is_new_video(titles)
-        print(newest_videos)
+        if status == 200:
+            titles = extract_video_titles(html)
+            is_new_video(titles)
+            print(newest_videos)
+        else:
+            print(f"Failed to retrieve page. Status code: {status}")
         time.sleep(60)
