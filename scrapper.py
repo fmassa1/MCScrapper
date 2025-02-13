@@ -18,13 +18,15 @@ def is_new_video(videos):
     elif videos[0] not in newest_videos:
         newest_videos.pop(0)
         newest_videos.append(videos[0])
+        update_user
 
 
 def retrieve_html(url):
     r = requests.get(url)
     return r.status_code, r.text
 
-
+def update_user():
+    return
 
 
 if __name__ == '__main__':
