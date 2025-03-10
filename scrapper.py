@@ -45,7 +45,9 @@
 
 import googleapiclient.discovery
 import requests
-from key import key
+import json
+
+from key import *
 # API information
 api_service_name = "youtube"
 api_version = "v3"
@@ -55,6 +57,32 @@ moistcritical_ID = "UCq6VFHwMzcMXbuKyG7SQYIg"
 # API client
 
 newest_videos = []
+
+def get_ai_response(title):
+
+    full_prompt = "Give me a short text detailing excitement for this new moistcritical video titled " + title 
+
+    # Construct the request payload
+    parameters = {
+        "inputs": """
+            <|begin_of_text|> <|start_header_id|>system<|end_header_id|> You are a friend, and are very excited to let your friend know about this new moistcritical video <|eot_id|> <|start_header_id|>user<|end_header_id|> """ 
+            + full_prompt + """ <|eot_id|> <|start_header_id|>assistant<|end_header_id|>
+        """,
+        "parameters": {
+            "max_new_tokens": 300
+        }
+    }
+
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(llama_url, headers=headers, data=json.dumps(parameters))
+
+    if response.status_code == 200:
+        print("Response:", response.json())  
+    else:
+        print("Error:", response.status_code, response.text)
+
 
 def get_newest_video(id):
     youtube = googleapiclient.discovery.build(
@@ -76,8 +104,11 @@ def get_newest_video(id):
         
         if video not in newest_videos:
             newest_videos.append(video)
+            get_ai_response(video)
             if len(newest_videos) > 3:
                 newest_videos.pop()
+
+            
 
     else:
         print("No videos found.")
