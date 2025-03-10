@@ -3,6 +3,7 @@ import re
 import json
 import time
 
+
 newest_videos = []
 
 def extract_video_titles(html):
@@ -25,6 +26,7 @@ def retrieve_html(url):
     r = requests.get(url)
     return r.status_code, r.text
 
+
 def update_user():
     return
 
@@ -39,4 +41,4 @@ if __name__ == '__main__':
             print(newest_videos)
         else:
             print(f"Failed to retrieve page. Status code: {status}")
-        time.sleep(60)
+        time.sleep(3600)
